@@ -21,7 +21,7 @@ async def parse_brokerage(file: UploadFile = File(...)):
     return results
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse
-from utils.statement_parser import parse_financial_statement
+from utils.statement_parser import parse_financial_pdf
 
 app = FastAPI()
 
@@ -44,4 +44,19 @@ async def parse_statement(file: UploadFile = File(...)):
 
     parsed = parse_financial_pdf(temp_path)
     return parsed
+@app.post("/parse_statement")
+async def parse_statement(file: UploadFile = File(...)):
+    try:
+        contents = await file.read()
+        temp_path = f"/tmp/{file.filename}"
+        with open(temp_path, "wb") as f:
+            f.write(contents)
+
+        # Call your generalized PDF parsing function
+        parsed = parse_financial_pdf(temp_path)
+
+        return {"parsed_data": parsed}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
