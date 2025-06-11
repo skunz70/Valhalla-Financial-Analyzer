@@ -1,6 +1,7 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from utils.brokerage_parser import parse_brokerage_pdf
+from utils.statement_parser import parse_financial_pdf
 
 app = FastAPI()
 
@@ -32,4 +33,15 @@ async def parse_statement(file: UploadFile = File(...)):
         return JSONResponse(content=result)
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
+from fastapi import UploadFile, File
+
+@app.post("/parse_statement")
+async def parse_statement(file: UploadFile = File(...)):
+    contents = await file.read()
+    temp_path = f"/tmp/{file.filename}"
+    with open(temp_path, "wb") as f:
+        f.write(contents)
+
+    parsed = parse_financial_pdf(temp_path)
+    return parsed
 
