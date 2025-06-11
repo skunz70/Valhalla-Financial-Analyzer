@@ -25,4 +25,4 @@ def parse_brokerage_pdf(contents: bytes) -> dict:
         summary["asset_breakdown"].append("Asset allocation section found")
 
     return summary
-added brokerage_parser utility
+
