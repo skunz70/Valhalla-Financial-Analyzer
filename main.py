@@ -18,4 +18,4 @@ async def parse_brokerage(file: UploadFile = File(...)):
     contents = await file.read()
     results = parse_brokerage_pdf(contents)
     return results
-
+Removed invalid comment from main.py
