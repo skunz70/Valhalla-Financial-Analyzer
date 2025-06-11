@@ -1,0 +1,5 @@
+fastapi
+uvicorn
+pdfplumber
+python-multipart
+added requirements.txt for deployment
